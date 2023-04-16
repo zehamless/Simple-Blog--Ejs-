@@ -7,12 +7,12 @@
 <% posts.forEach(post => { %>
     <div>
         <h3>
-            <a href="/post/<%= post.link %>">
+
             <%= post.title %>
-            </a>
         </h3>
-        <p>
-            <%= post.text %>
+        <p id="paragraph">
+            <%= post.text.substring(0, 100)+" ..." %><a href="/post/<%= post.link %>">Read more
+            </a>
         </p>
     </div>
     <hr>
