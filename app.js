@@ -41,26 +41,24 @@ app.get("/compose", function (req, res) {
 });
 
 app.post("/compose", function (req, res) {
-  const link = lowerCase(req.body.postTitle)
+  const link = lowerCase(req.body.postTitle);
   const post = {
     title: req.body.postTitle,
     text: req.body.postText,
-    link: link
+    link: link,
   };
   postData.push(post);
   res.redirect("/");
 });
 
 app.get("/post/:posting", function (req, res) {
-
   postData.forEach((element) => {
     const title = element.title;
-    if (lowerCase(title)=== req.params.posting) {
+    if (lowerCase(title) === req.params.posting) {
       res.render("post", { content: element });
     }
   });
 });
-
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
