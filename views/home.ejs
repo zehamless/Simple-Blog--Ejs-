@@ -7,7 +7,9 @@
 <% posts.forEach(post => { %>
     <div>
         <h3>
+            <a href="/post/<%= post.link %>">
             <%= post.title %>
+            </a>
         </h3>
         <p>
             <%= post.text %>
