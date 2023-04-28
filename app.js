@@ -4,6 +4,25 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const { forEach, lowerCase } = require("lodash");
+const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
+
+// Replace the uri string with your connection string.
+const uri = "mongodb://localhost:27017/blog";
+
+const client = new MongoClient(uri);
+
+// async function run() {
+//   try {
+//     await client.connect();
+//     await client.db("admin").command({ ping: 1 });
+//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+//   } finally {
+//     await client.close();
+//   }
+// }
+// run().catch(console.dir);
+
 
 const homeStartingContent =
   "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
@@ -20,11 +39,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 res = app.get;
 
+const post = {
+  title: String,
+  text: String,
+};
+
+const postModel = mongoose.model("posts", post);
+
+const postDemo = new postModel({
+  title: "Demo",
+  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fug
+});
+
 let postData = [];
 app.get("/", function (req, res) {
-  res.render("home", { content: homeStartingContent, posts: postData });
-  postData.forEach((element) => {
-    console.log(element.title);
+  postModel.find({}).then(function (foundPost) {
+    if (foundPost === 0){
+      postModel.insertOne(postDemo).then(function(){
+        console.log("Successfully");
+      }).catch(function(err){
+        console.log(err);
+      });
+    };
+    res.redirect("/");
   });
 });
 
